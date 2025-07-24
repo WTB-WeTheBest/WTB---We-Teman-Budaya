@@ -73,6 +73,19 @@ def logout(request):
         return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def refresh_token(request):
+    try:
+        refresh_token = request.data["refresh"]
+        token = RefreshToken(refresh_token)
+        return Response({
+            'access': str(token.access_token),
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 # Template views
 def home(request):
     if request.user.is_authenticated:
@@ -96,7 +109,7 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
-            messages.success(request, f'Welcome back, {user.first_name or user.username}!')
+            messages.success(request, f'Welcome back, {user.username}!')
             return redirect('home')
         else:
             messages.error(request, 'Invalid username or password.')
@@ -111,8 +124,6 @@ def register_page(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
         
@@ -134,12 +145,10 @@ def register_page(request):
             user = User.objects.create_user(
                 username=username,
                 email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name
+                password=password
             )
             auth_login(request, user)
-            messages.success(request, f'Welcome to Garuda, {user.first_name}!')
+            messages.success(request, f'Welcome to Garuda, {user.username}!')
             return redirect('home')
         except Exception as e:
             messages.error(request, 'Registration failed. Please try again.')

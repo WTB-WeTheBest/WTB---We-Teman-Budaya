@@ -9,7 +9,7 @@
     <div class="bg-white rounded-lg shadow-md p-8 mb-8">
         <div class="text-center">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                Welcome back, {{ user.first_name|default:user.username }}!
+                Welcome back, {{ user.username }}!
             </h1>
             <p class="text-xl text-gray-600 mb-4">
                 Ready to continue your journey with Garuda?
@@ -151,10 +151,10 @@
             <div class="text-center mb-4">
                 <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span class="text-2xl font-bold text-blue-600">
-                        {{ user.first_name.0|default:user.username.0|upper }}{{ user.last_name.0|upper }}
+                        {{ user.username.0|upper }}
                     </span>
                 </div>
-                <h3 class="font-semibold text-gray-900">{{ user.get_full_name|default:user.username }}</h3>
+                <h3 class="font-semibold text-gray-900">{{ user.username }}</h3>
                 <p class="text-sm text-gray-600">{{ user.email }}</p>
             </div>
             <div class="space-y-2 text-sm">

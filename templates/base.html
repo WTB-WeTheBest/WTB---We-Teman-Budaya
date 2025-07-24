@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{% block title %}Garuda - Hackathon Project{% endblock %}</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			rel="stylesheet"
+			href="{% load static %}{% static 'css/style.css' %}"
+		/>
+		{% block extra_css %}{% endblock %}
+	</head>
+	<body class="bg-gray-50">
+		{% include 'includes/navbar.html' %}
+
+		<main class="max-w-7xl mx-auto px-4 py-8">
+			{% if messages %} {% for message in messages %}
+			<div
+				class="mb-4 p-4 rounded-md {% if message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% elif message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-blue-100 border border-blue-400 text-blue-700{% endif %}"
+			>
+				{{ message }}
+				<button
+					onclick="this.parentElement.remove()"
+					class="float-right text-lg font-bold"
+				>
+					&times;
+				</button>
+			</div>
+			{% endfor %} {% endif %} {% block content %}{% endblock %}
+		</main>
+
+		<footer class="bg-white border-t border-gray-200 mt-12">
+			<div class="max-w-7xl mx-auto px-4 py-6">
+				<p class="text-center text-gray-600">
+					&copy; 2025 Garuda Hackathon Project. Built with Django & Tailwind
+					CSS.
+				</p>
+			</div>
+		</footer>
+
+		<script src="{% load static %}{% static 'js/main.js' %}"></script>
+		{% block extra_js %}{% endblock %}
+	</body>
+</html>

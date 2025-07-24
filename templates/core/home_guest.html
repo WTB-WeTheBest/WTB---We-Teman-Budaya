@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome to Garuda{% endblock %}
+
+{% block content %}
+<div class="min-h-screen">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-12 mb-8">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold mb-4">Welcome to Garuda</h1>
+            <p class="text-xl mb-8">Your next-generation hackathon project platform</p>
+            <div class="space-x-4">
+                <a href="{% url 'register_page' %}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Get Started
+                </a>
+                <a href="{% url 'login_page' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="text-blue-600 mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-center">Fast & Secure</h3>
+            <p class="text-gray-600 text-center">Built with modern security practices and optimized for speed.</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="text-blue-600 mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-center">Customizable</h3>
+            <p class="text-gray-600 text-center">Flexible platform that adapts to your project needs.</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="text-blue-600 mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-center">Collaborative</h3>
+            <p class="text-gray-600 text-center">Built for teams to work together seamlessly.</p>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose Garuda?</h2>
+            <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                Garuda is designed specifically for hackathon projects, providing all the tools and features you need to build, deploy, and showcase your innovative ideas quickly and efficiently.
+            </p>
+            <div class="grid md:grid-cols-2 gap-6 text-left">
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">Rapid Development</h4>
+                        <p class="text-gray-600">Pre-built components and templates to accelerate your development process.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">Modern Stack</h4>
+                        <p class="text-gray-600">Built with Django, Tailwind CSS, and modern web technologies.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">API Ready</h4>
+                        <p class="text-gray-600">RESTful APIs with authentication built in for seamless integration.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">Deployment Ready</h4>
+                        <p class="text-gray-600">Configured for easy deployment to popular cloud platforms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-gray-100 rounded-lg p-8 text-center">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to get started?</h2>
+        <p class="text-gray-600 mb-6 text-lg">Join thousands of developers building amazing projects with Garuda.</p>
+        <a href="{% url 'register_page' %}" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg">
+            Create Your Account
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -22,16 +22,15 @@ jobs:
       - name: Create .env file from secrets
         run: |
           cat <<EOF > .env
-          QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}
-          QDRANT_GRPC_HOST=${{ secrets.QDRANT_GRPC_HOST }}
-          QDRANT_GRPC_PORT=${{ secrets.QDRANT_GRPC_PORT }}
-          RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }}
-          RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }}
-          RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}
-          RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}
-          CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}
-          CORS_ALLOWED_HEADERS=${{ secrets.CORS_ALLOWED_HEADERS }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          DEBUG=${{ secrets.DEBUG }}
+          ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+          DATABASE_USER=${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+          DATABASE_PORT=${{ secrets.DATABASE_PORT }}
           EOF
 
       - name: Prepare deploy files

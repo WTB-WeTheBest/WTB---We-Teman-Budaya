@@ -53,7 +53,7 @@
                         Coordinates <span class="text-red-500">*</span>
                     </label>
                     {{ form.coordinates }}
-                    <p class="mt-1 text-sm text-gray-500">{{ form.coordinates.help_text }}</p>
+                    <p class="mt-1 text-sm text-gray-500">Copy coordinates from Google Maps (latitude, longitude format). Example: -6.249843, 106.721798</p>
                     {% if form.coordinates.errors %}
                         <div class="mt-1 text-sm text-red-600">
                             {% for error in form.coordinates.errors %}{{ error }}{% endfor %}

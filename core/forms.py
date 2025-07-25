@@ -1,6 +1,34 @@
 from django import forms
 from orm_center.models import Landmark, Activity, Marker, Location, Picture
 import uuid
+import re
+
+
+def convert_google_maps_to_postgis(coordinates_str):
+    """
+    Convert Google Maps coordinate format to PostGIS POINT format
+    Input: "-6.249843959180328, 106.72179805118446" (latitude, longitude)
+    Output: "POINT(106.72179805118446 -6.249843959180328)" (longitude latitude)
+    """
+    coordinates_str = coordinates_str.strip()
+    
+    # Remove any POINT wrapper if already exists
+    if coordinates_str.upper().startswith('POINT'):
+        return coordinates_str
+    
+    # Try to parse Google Maps format (latitude, longitude)
+    # Pattern matches: optional whitespace, number (with optional decimal), comma, optional whitespace, number
+    pattern = r'^\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*$'
+    match = re.match(pattern, coordinates_str)
+    
+    if match:
+        latitude = float(match.group(1))
+        longitude = float(match.group(2))
+        # PostGIS format is POINT(longitude latitude)
+        return f"POINT({longitude} {latitude})"
+    
+    # If it doesn't match Google Maps format, assume it's already in correct format
+    return coordinates_str
 
 
 class LocationForm(forms.ModelForm):
@@ -18,10 +46,19 @@ class LocationForm(forms.ModelForm):
             }),
             'coordinates': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter coordinates (e.g., POINT(101.4542 0.5073))',
-                'help_text': 'Use PostGIS POINT format'
+                'placeholder': 'Enter coordinates (e.g., -6.249843, 106.721798)',
+                'help_text': 'Use Google Maps format: latitude, longitude'
             }),
         }
+
+    def clean_coordinates(self):
+        coordinates = self.cleaned_data.get('coordinates')
+        if coordinates:
+            try:
+                return convert_google_maps_to_postgis(coordinates)
+            except Exception as e:
+                raise forms.ValidationError(f'Invalid coordinate format: {str(e)}')
+        return coordinates
 
 
 class MarkerForm(forms.ModelForm):
@@ -130,9 +167,9 @@ class CombinedLandmarkForm(forms.Form):
         max_length=255,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter coordinates (e.g., POINT(101.4542 0.5073))'
+            'placeholder': 'Enter coordinates (e.g., -6.249843, 106.721798)'
         }),
-        help_text='Use PostGIS POINT format: POINT(longitude latitude)'
+        help_text='Use Google Maps format: latitude, longitude'
     )
     
     # Marker fields
@@ -197,6 +234,15 @@ class CombinedLandmarkForm(forms.Form):
         help_text='Enter one image URL per line (optional)'
     )
 
+    def clean_coordinates(self):
+        coordinates = self.cleaned_data.get('coordinates')
+        if coordinates:
+            try:
+                return convert_google_maps_to_postgis(coordinates)
+            except Exception as e:
+                raise forms.ValidationError(f'Invalid coordinate format: {str(e)}')
+        return coordinates
+
     def clean_picture_urls(self):
         urls = self.cleaned_data.get('picture_urls', '')
         if not urls.strip():
@@ -236,9 +282,9 @@ class CombinedActivityForm(forms.Form):
         max_length=255,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter coordinates (e.g., POINT(101.4542 0.5073))'
+            'placeholder': 'Enter coordinates (e.g., -6.249843, 106.721798)'
         }),
-        help_text='Use PostGIS POINT format: POINT(longitude latitude)'
+        help_text='Use Google Maps format: latitude, longitude'
     )
     
     # Marker fields
@@ -293,6 +339,15 @@ class CombinedActivityForm(forms.Form):
         }),
         help_text='Enter one image URL per line (optional)'
     )
+
+    def clean_coordinates(self):
+        coordinates = self.cleaned_data.get('coordinates')
+        if coordinates:
+            try:
+                return convert_google_maps_to_postgis(coordinates)
+            except Exception as e:
+                raise forms.ValidationError(f'Invalid coordinate format: {str(e)}')
+        return coordinates
 
     def clean_picture_urls(self):
         urls = self.cleaned_data.get('picture_urls', '')

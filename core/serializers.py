@@ -2,17 +2,19 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from .validators import validate_email_format, validate_username_format, validate_secure_password
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password = serializers.CharField(write_only=True, validators=[validate_secure_password])
     password_confirm = serializers.CharField(write_only=True)
     
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'password_confirm')
         extra_kwargs = {
-            'email': {'required': True},
+            'email': {'required': True, 'validators': [validate_email_format]},
+            'username': {'validators': [validate_username_format]},
         }
     
     def validate(self, attrs):
@@ -21,8 +23,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
     
     def validate_email(self, value):
+        # Custom format validation is handled by the validator in Meta
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already exists")
+        return value
+    
+    def validate_username(self, value):
+        # Custom format validation is handled by the validator in Meta
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Username already exists")
         return value
     
     def create(self, validated_data):

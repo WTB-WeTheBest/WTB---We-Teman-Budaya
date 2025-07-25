@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from .validators import validate_email_format, validate_username_format, validate_secure_password
+from orm_center.models import Landmark, Marker, Location, Picture, Activity
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -50,3 +51,40 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'date_joined')
         read_only_fields = ('id', 'username', 'date_joined')
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ('id', 'coordinates', 'city', 'province')
+
+
+class PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Picture
+        fields = ('id', 'url')
+
+
+class MarkerSerializer(serializers.ModelSerializer):
+    location = LocationSerializer(source='id_location', read_only=True)
+    pictures = PictureSerializer(source='picture_set', many=True, read_only=True)
+    
+    class Meta:
+        model = Marker
+        fields = ('id', 'name', 'description', 'contact', 'url', 'min_price', 'max_price', 'location', 'pictures')
+
+
+class LandmarkSerializer(serializers.ModelSerializer):
+    marker = MarkerSerializer(source='id', read_only=True)
+    
+    class Meta:
+        model = Landmark
+        fields = ('story', 'marker')
+
+
+class ActivitySerializer(serializers.ModelSerializer):
+    marker = MarkerSerializer(source='id', read_only=True)
+    
+    class Meta:
+        model = Activity
+        fields = ('marker',)

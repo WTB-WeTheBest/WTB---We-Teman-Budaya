@@ -1,0 +1,66 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t wtb-we-teman-budaya:latest .
+
+      - name: Save Docker image to file
+        run: docker save wtb-we-teman-budaya:latest -o wtb-we-teman-budaya.tar
+
+      - name: Create .env file from secrets
+        run: |
+          cat <<EOF > .env
+          QDRANT_API_KEY=${{ secrets.QDRANT_API_KEY }}
+          QDRANT_GRPC_HOST=${{ secrets.QDRANT_GRPC_HOST }}
+          QDRANT_GRPC_PORT=${{ secrets.QDRANT_GRPC_PORT }}
+          RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }}
+          RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }}
+          RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}
+          RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }}
+          CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}
+          CORS_ALLOWED_HEADERS=${{ secrets.CORS_ALLOWED_HEADERS }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          EOF
+
+      - name: Prepare deploy files
+        run: |
+          mkdir WTB--We-Teman-Budaya
+          mv wtb-we-teman-budaya.tar .env docker-compose.yml WTB--We-Teman-Budaya/
+
+      - name: Copy Docker image and .env to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "WTB--We-Teman-Budaya/*"
+          target: "~/"
+
+      - name: Deploy on remote server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/WTB--We-Teman-Budaya
+
+            docker compose down || true
+            docker rmi wtb-we-teman-budaya:latest || true
+            
+            docker load -i wtb-we-teman-budaya.tar
+            rm wtb-we-teman-budaya.tar
+            
+            docker compose up -d
